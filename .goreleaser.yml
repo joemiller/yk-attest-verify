@@ -1,0 +1,135 @@
+project_name: yk-attest-verify
+
+builds:
+  - binary: yk-attest-verify
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      # Default is `-s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.Date}}`.
+      -s -w -X github.com/joemiller/yk-attest-verify/cmd.version={{.Version}}+{{.ShortCommit}}
+    goos:
+      - linux
+      - darwin
+      # - windows
+      - freebsd
+      - openbsd
+      # - dragonfly
+      # - netbsd
+    goarch:
+      - 386
+      - amd64
+      - arm
+      - arm64
+    goarm:
+      - ""
+    ignore:
+      - goos: darwin
+        goarch: 386
+      - goos: windows
+        goarch: 386
+
+archives:
+  # binary-only releases - all platforms
+  - id: binaries
+    format: binary
+    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
+  # archive releases containing: binary, readme, and license. tarballs (macos, linux), zip (windows)
+  - id: archives
+    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
+    replacements:
+      386: i386
+    format_overrides:
+      - goos: windows
+        format: zip
+
+checksum:
+  name_template: "checksums.txt"
+
+snapshot:
+  name_template: "{{ .Tag }}-next"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "skip ci"
+      - "ci skip"
+      - Merge pull request
+      - Merge branch
+
+brews:
+  - ids:
+      - archives
+    github:
+      owner: joemiller
+      name: homebrew-taps
+    commit_author:
+      name: joe miller
+      email: yk-attest-verify@joemiller.me
+    folder: Formula
+    homepage: "https://github.com/joemiller/yk-attest-verify"
+    description: "yk-attest-verify is TODO"
+
+dockers:
+  # primary docker image for amd64 arch
+  - dockerfile: Dockerfile
+    binaries:
+      - yk-attest-verify
+    goos: linux
+    goarch: amd64
+    image_templates:
+      - "joemiller/yk-attest-verify:{{ .Tag }}" # v1.0.0
+      - "joemiller/yk-attest-verify:v{{ .Major }}" # v1
+      - "joemiller/yk-attest-verify:v{{ .Major }}.{{ .Minor }}" # v1.0
+      - "joemiller/yk-attest-verify:latest"
+  # build a docker image for arm64 arch
+  - dockerfile: Dockerfile
+    binaries:
+      - yk-attest-verify
+    goos: linux
+    goarch: arm64
+    goarm: ""
+    image_templates:
+      - "joemiller/yk-attest-verify:{{ .Tag }}-arm64" # v1.0.0
+      - "joemiller/yk-attest-verify:v{{ .Major }}-arm64" # v1
+      - "joemiller/yk-attest-verify:v{{ .Major }}.{{ .Minor }}-arm64" # v1.0
+      - "joemiller/yk-attest-verify:latest-arm64"
+  # build a docker image for arm
+  - dockerfile: Dockerfile
+    binaries:
+      - yk-attest-verify
+    goos: linux
+    goarch: arm
+    goarm: ""
+    image_templates:
+      - "joemiller/yk-attest-verify:{{ .Tag }}-arm" # v1.0.0
+      - "joemiller/yk-attest-verify:v{{ .Major }}-arm" # v1
+      - "joemiller/yk-attest-verify:v{{ .Major }}.{{ .Minor }}-arm" # v1.0
+      - "joemiller/yk-attest-verify:latest-arm"
+
+# ## generate RPM and DEB packages
+nfpms:
+  - id: yk-attest-verify
+    vendor: "Joe Miller"
+    homepage: "https://github.com/joemiller/yk-attest-verify"
+    maintainer: "yk-attest-verify@joemiller.me"
+    description: "yk-attest-verify is TODO"
+    license: MIT
+    formats:
+      - deb
+      - rpm
+    overrides:
+      rpm:
+        file_name_template: "{{ .ProjectName }}-{{ .Version }}-{{ .Arch }}"
+        replacements:
+          amd64: x86_64
+          386: i686
+          arm: armhfp
+          arm64: aarch64
+      deb:
+        file_name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+        replacements:
+          386: i386
+          arm: armel
