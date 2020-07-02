@@ -1,6 +1,9 @@
 yk-attest-verify
 ================
 
+![main](https://github.com/joemiller/yk-attest-verify/workflows/main/badge.svg)
+TODO: godoc
+
 Validate and enforce policy on YubiKey PIV and OpenPGP attestation certificates.
 
 One use case of this utility is to enforce SSH keys are generated and stored solely on a YubiKey.
@@ -10,7 +13,7 @@ Install
 
 * macOS homebrew (Linuxbrew might work too): `brew install joemiller/taps/yk-attest-verify`
 * Binaries for all platforms (macOS, Linux, *BSD) on [GitHub Releases](https://github.com/joemiller/yk-attest-verify/releases)
-* [Docker images](https://github.com/joemiller/yk-attest-verify) are also available.
+* [Docker images](https://hub.docker.com/r/joemiller/yk-attest-verify) are also available.
 
 Generating attestation certs
 ----------------------------
