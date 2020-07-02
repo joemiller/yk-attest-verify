@@ -2,7 +2,6 @@ yk-attest-verify
 ================
 
 ![main](https://github.com/joemiller/yk-attest-verify/workflows/main/badge.svg)
-TODO: godoc
 
 Validate and enforce policy on YubiKey PIV and OpenPGP attestation certificates.
 
