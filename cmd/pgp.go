@@ -154,9 +154,7 @@ func pgpVerify(cmd *cobra.Command, args []string) error {
 	}
 
 	if val, err := cmd.Flags().GetStringSlice("allowed-cardholders"); err == nil {
-		for _, i := range val {
-			verifyReq.Policy.AllowedCardholders = append(verifyReq.Policy.AllowedCardholders, i)
-		}
+		verifyReq.Policy.AllowedCardholders = append(verifyReq.Policy.AllowedCardholders, val...)
 	}
 
 	errors := false

@@ -26,6 +26,7 @@ func TestCompare(t *testing.T) {
 	for _, tc := range tests {
 		t.Run(tc, func(t *testing.T) {
 			keyA, err := certin.GenerateKey(tc)
+			require.NoError(t, err)
 			keyB, err := certin.GenerateKey(tc)
 			require.NoError(t, err)
 
@@ -39,6 +40,7 @@ func TestCompare(t *testing.T) {
 				certpubkeyA = keyA.(*rsa.PrivateKey).Public()
 				certpubkeyB = keyB.(*rsa.PrivateKey).Public()
 				sshpubkeyA, err = ssh.NewPublicKey(certpubkeyA)
+				require.NoError(t, err)
 				sshpubkeyB, err = ssh.NewPublicKey(certpubkeyB)
 				require.NoError(t, err)
 
@@ -46,6 +48,7 @@ func TestCompare(t *testing.T) {
 				certpubkeyA = keyA.(*ecdsa.PrivateKey).Public()
 				certpubkeyB = keyB.(*ecdsa.PrivateKey).Public()
 				sshpubkeyA, err = ssh.NewPublicKey(certpubkeyA)
+				require.NoError(t, err)
 				sshpubkeyB, err = ssh.NewPublicKey(certpubkeyB)
 				require.NoError(t, err)
 
@@ -53,6 +56,7 @@ func TestCompare(t *testing.T) {
 				certpubkeyA = keyA.(ed25519.PrivateKey).Public()
 				certpubkeyB = keyB.(ed25519.PrivateKey).Public()
 				sshpubkeyA, err = ssh.NewPublicKey(certpubkeyA)
+				require.NoError(t, err)
 				sshpubkeyB, err = ssh.NewPublicKey(certpubkeyB)
 				require.NoError(t, err)
 
