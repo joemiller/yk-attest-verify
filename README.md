@@ -2,6 +2,7 @@ yk-attest-verify
 ================
 
 ![main](https://github.com/joemiller/yk-attest-verify/workflows/main/badge.svg)
+[![Go Doc](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat)](https://pkg.go.dev/github.com/joemiller/yk-attest-verify?tab=subdirectories)
 
 Validate and enforce policy on YubiKey PIV and OpenPGP attestation certificates.
 
