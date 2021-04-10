@@ -62,7 +62,7 @@ changelog:
 brews:
   - ids:
       - archives
-    github:
+    tap:
       owner: joemiller
       name: homebrew-taps
     commit_author:
@@ -70,12 +70,12 @@ brews:
       email: yk-attest-verify@joemiller.me
     folder: Formula
     homepage: "https://github.com/joemiller/yk-attest-verify"
-    description: "yk-attest-verify is TODO"
+    description: "Validate and enforce policy on YubiKey PIV and OpenPGP attestation certificates"
 
 dockers:
   # primary docker image for amd64 arch
   - dockerfile: Dockerfile
-    binaries:
+    ids:
       - yk-attest-verify
     goos: linux
     goarch: amd64
@@ -86,7 +86,7 @@ dockers:
       - "joemiller/yk-attest-verify:latest"
   # build a docker image for arm64 arch
   - dockerfile: Dockerfile
-    binaries:
+    ids:
       - yk-attest-verify
     goos: linux
     goarch: arm64
@@ -98,7 +98,7 @@ dockers:
       - "joemiller/yk-attest-verify:latest-arm64"
   # build a docker image for arm
   - dockerfile: Dockerfile
-    binaries:
+    ids:
       - yk-attest-verify
     goos: linux
     goarch: arm
@@ -115,7 +115,7 @@ nfpms:
     vendor: "Joe Miller"
     homepage: "https://github.com/joemiller/yk-attest-verify"
     maintainer: "yk-attest-verify@joemiller.me"
-    description: "yk-attest-verify is TODO"
+    description: "Validate and enforce policy on YubiKey PIV and OpenPGP attestation certificates"
     license: MIT
     formats:
       - deb
