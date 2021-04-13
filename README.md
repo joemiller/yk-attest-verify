@@ -19,7 +19,7 @@ Generating attestation certs
 ----------------------------
 
 The process for generating and verifying attestation certs is similar for both PIV and
-OpenPGP. You need to generate an **attestation** certificate and export the **signing** certificate
+OpenPGP. You need to (1) generate an *attestation* certificate and (2) export the *signing* certificate
 from the YubiKey. Both files are required inputs to `yk-attest-verify`.
 
 The signing certificate is similar to an intermediate CA cert. It is unique to each YubiKey
