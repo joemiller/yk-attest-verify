@@ -62,7 +62,7 @@ changelog:
 brews:
   - ids:
       - archives
-    github:
+    tap:
       owner: joemiller
       name: homebrew-taps
     commit_author:
@@ -75,7 +75,7 @@ brews:
 dockers:
   # primary docker image for amd64 arch
   - dockerfile: Dockerfile
-    binaries:
+    ids:
       - yk-attest-verify
     goos: linux
     goarch: amd64
@@ -86,7 +86,7 @@ dockers:
       - "joemiller/yk-attest-verify:latest"
   # build a docker image for arm64 arch
   - dockerfile: Dockerfile
-    binaries:
+    ids:
       - yk-attest-verify
     goos: linux
     goarch: arm64
@@ -98,7 +98,7 @@ dockers:
       - "joemiller/yk-attest-verify:latest-arm64"
   # build a docker image for arm
   - dockerfile: Dockerfile
-    binaries:
+    ids:
       - yk-attest-verify
     goos: linux
     goarch: arm
