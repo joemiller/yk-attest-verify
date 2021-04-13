@@ -237,10 +237,12 @@ func (a *Attestation) addExt(e pkix.Extension) error {
 		}
 
 	case e.Id.Equal(extIDFormFactor):
+		// XXX(joe): formfactor is encoded directly as 1 byte. It is not marshaled into an ASN.1 type
 		var formfactor []byte
-		if _, err := asn1.Unmarshal(e.Value, &formfactor); err != nil {
-			return fmt.Errorf("parsing formfactor: %v", err)
-		}
+		// if _, err := asn1.Unmarshal(e.Value, &formfactor); err != nil {
+		// 	return fmt.Errorf("parsing formfactor: %v", err)
+		// }
+		formfactor = e.Value
 		if len(formfactor) != 1 {
 			return fmt.Errorf("expected 1 byte from formfactor, got: %d", len(formfactor))
 		}
