@@ -66,8 +66,9 @@ func makePIVAttestationCert(t *testing.T, signer *certin.KeyAndCert, cfg pivAtte
 	if cfg.formfactor == 0 {
 		cfg.formfactor = FormfactorUSBAKeychain // default if not specified
 	}
-	formfactor, err := asn1.Marshal([]byte{byte(cfg.formfactor)})
-	require.Nil(t, err)
+	// formfactor, err := asn1.Marshal([]byte{byte(cfg.formfactor)})
+	// require.Nil(t, err)
+	formfactor := []byte{byte(cfg.formfactor)}
 
 	if cfg.pinpolicy == 0 {
 		cfg.pinpolicy = PINPolicyNever
