@@ -8,9 +8,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/alecthomas/assert"
 	"github.com/joemiller/certin"
 	"github.com/joemiller/yk-attest-verify/pkg/pubkeys"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"golang.org/x/crypto/ssh"
 )
