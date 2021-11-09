@@ -9,10 +9,9 @@ require (
 	github.com/joemiller/certin v0.0.3
 	github.com/mattn/go-isatty v0.0.12 // indirect
 	github.com/sergi/go-diff v1.1.0 // indirect
-	github.com/spf13/cobra v1.0.0
-	github.com/stretchr/testify v1.6.1
-	golang.org/x/crypto v0.0.0-20200604202706-70a84ac30bf9
-	golang.org/x/sys v0.0.0-20200610111108-226ff32320da // indirect
+	github.com/spf13/cobra v1.2.1
+	github.com/stretchr/testify v1.7.0
+	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9
 )
 
 // replace github.com/joemiller/certin v0.0.0-20200616162212-8e034fba0302 => ../certin
