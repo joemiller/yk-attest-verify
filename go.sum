@@ -227,6 +227,8 @@ github.com/inconshreveable/mousetrap v1.0.0 h1:Z8tu5sraLXCXIcARxBp/8cbvlwVa7Z1NH
 github.com/inconshreveable/mousetrap v1.0.0/go.mod h1:PxqpIevigyE2G7u3NXJIT2ANytuPF1OarO4DADm73n8=
 github.com/joemiller/certin v0.2.4 h1:xVki7An6xEiUrXnQzohW0kM5qneiHTwuEkR9ilvC6NY=
 github.com/joemiller/certin v0.2.4/go.mod h1:G893F3MhZAmOYEo6EfFNrlmdMV0c54LzyB2cvr8gTN0=
+github.com/joemiller/certin v0.3.1 h1:RexZMmUCPlB9MYuY08jCD+m6au0Fn+Ji50yFRtTcESk=
+github.com/joemiller/certin v0.3.1/go.mod h1:G893F3MhZAmOYEo6EfFNrlmdMV0c54LzyB2cvr8gTN0=
 github.com/json-iterator/go v1.1.6/go.mod h1:+SdeFBvtyEkXs7REEP0seUULqWtbJapLOCVDaaPEHmU=
 github.com/json-iterator/go v1.1.9/go.mod h1:KdQUCv79m/52Kvf8AW2vK1V8akMuk1QjK/uOdHXbAo4=
 github.com/json-iterator/go v1.1.11/go.mod h1:KdQUCv79m/52Kvf8AW2vK1V8akMuk1QjK/uOdHXbAo4=
