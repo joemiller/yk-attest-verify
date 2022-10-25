@@ -4,7 +4,7 @@ go 1.16
 
 require (
 	github.com/joemiller/certin v0.3.1
-	github.com/spf13/cobra v1.3.0
+	github.com/spf13/cobra v1.6.1
 	github.com/stretchr/testify v1.7.0
 	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5
 )
