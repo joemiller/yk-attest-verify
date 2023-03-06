@@ -26,6 +26,7 @@ import (
 	"crypto/x509"
 	"crypto/x509/pkix"
 	"encoding/asn1"
+	"encoding/json"
 	"fmt"
 )
 
@@ -87,6 +88,11 @@ func (f Formfactor) String() string {
 	return formfactorNames[f]
 }
 
+// MarshalJSON encodes value into String().
+func (f Formfactor) MarshalJSON() ([]byte, error) {
+	return json.Marshal(f.String())
+}
+
 // PINPolicy represents PIN requirements when signing or decrypting with an
 // asymmetric key in a given slot.
 type PINPolicy int
@@ -112,6 +118,11 @@ func (p PINPolicy) String() string {
 	return pinpolicyNames[p]
 }
 
+// MarshalJSON encodes value into String().
+func (p PINPolicy) MarshalJSON() ([]byte, error) {
+	return json.Marshal(p.String())
+}
+
 // TouchPolicy represents proof-of-presence requirements when signing or
 // decrypting with asymmetric key in a given slot.
 type TouchPolicy int
@@ -131,6 +142,11 @@ var touchPolicyNames = []string{
 
 func (t TouchPolicy) String() string {
 	return touchPolicyNames[t]
+}
+
+// MarshalJSON encodes value into String().
+func (t TouchPolicy) MarshalJSON() ([]byte, error) {
+	return json.Marshal(t.String())
 }
 
 // Attestation returns additional information about a key attested to be on a
