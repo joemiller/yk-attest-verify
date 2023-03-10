@@ -46,7 +46,7 @@ func TestVerify_NotSignedByYubiCoRoot(t *testing.T) {
 	assert.NotNil(t, err)
 
 	verifyErrs := err.(VerificationErrors)
-	assert.Contains(t, verifyErrs, errors.New("attestation signer certifcate is not signed by YubiCo PIV Root CA: crypto/rsa: verification error"))
+	assert.Contains(t, verifyErrs, errors.New("attestation signer certificate is not signed by YubiCo PIV Root CA: crypto/rsa: verification error"))
 }
 
 func TestVerify_NotSignedByOnDeviceAttestationKey(t *testing.T) {

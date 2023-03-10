@@ -102,7 +102,7 @@ func (v *verifier) verify(req VerificationRequest) (*Attestation, error) {
 	// Verify signatures:
 	// The Attestation Signer Cert from the yubikey must be signed by YubiCo's attestation root
 	if err := verifySignature(root, req.AttestSignerCert); err != nil {
-		errs = append(errs, fmt.Errorf("attestation signer certifcate is not signed by YubiCo PIV Root CA: %v", err))
+		errs = append(errs, fmt.Errorf("attestation signer certificate is not signed by YubiCo PIV Root CA: %v", err))
 	}
 	// The Attestation Cert must be signed by the Attestation Signer Cert
 	if err := verifySignature(req.AttestSignerCert, req.AttestCert); err != nil {
