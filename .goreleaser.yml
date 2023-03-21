@@ -18,7 +18,6 @@ builds:
     goarch:
       - 386
       - amd64
-      - arm
       - arm64
     goarm:
       - ""
@@ -99,18 +98,6 @@ dockers:
       - "joemiller/yk-attest-verify:v{{ .Major }}-arm64" # v1
       - "joemiller/yk-attest-verify:v{{ .Major }}.{{ .Minor }}-arm64" # v1.0
       - "joemiller/yk-attest-verify:latest-arm64"
-  # build a docker image for arm
-  - dockerfile: Dockerfile
-    ids:
-      - yk-attest-verify
-    goos: linux
-    goarch: arm
-    goarm: ""
-    image_templates:
-      - "joemiller/yk-attest-verify:{{ .Tag }}-arm" # v1.0.0
-      - "joemiller/yk-attest-verify:v{{ .Major }}-arm" # v1
-      - "joemiller/yk-attest-verify:v{{ .Major }}.{{ .Minor }}-arm" # v1.0
-      - "joemiller/yk-attest-verify:latest-arm"
 
 # ## generate RPM and DEB packages
 nfpms:
