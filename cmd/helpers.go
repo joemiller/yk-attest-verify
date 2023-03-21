@@ -3,14 +3,14 @@ package cmd
 import (
 	"crypto/x509"
 	"encoding/pem"
-	"io/ioutil"
+	"os"
 	"strings"
 )
 
 var indentation = `  `
 
 func loadX509CertFile(certFile string) (*x509.Certificate, error) {
-	certPEMBlock, err := ioutil.ReadFile(certFile)
+	certPEMBlock, err := os.ReadFile(certFile)
 	if err != nil {
 		return nil, err
 	}
