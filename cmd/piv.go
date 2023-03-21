@@ -3,7 +3,6 @@ package cmd
 import (
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"strings"
 
@@ -87,7 +86,7 @@ func pivVerify(cmd *cobra.Command, args []string) error {
 
 	var sshPubKey ssh.PublicKey
 	if sshPubKeyFile != "" {
-		pubkeyraw, err := ioutil.ReadFile(sshPubKeyFile)
+		pubkeyraw, err := os.ReadFile(sshPubKeyFile)
 		if err != nil {
 			return fmt.Errorf("Error reading SSH pub key %s: %w", sshPubKeyFile, err)
 		}

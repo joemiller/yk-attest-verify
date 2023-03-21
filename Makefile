@@ -6,7 +6,7 @@ lint:
 	@if command -v goreleaser >/dev/null; then \
 		goreleaser check; \
 	else \
-		echo "goreleaser not installed, skiping goreleaser linting"; \
+		echo "goreleaser not installed, skipping goreleaser linting"; \
 	fi
 
 test:
