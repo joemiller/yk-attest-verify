@@ -1,6 +1,6 @@
 module github.com/joemiller/yk-attest-verify
 
-go 1.17
+go 1.20
 
 require (
 	github.com/joemiller/certin v0.3.4
