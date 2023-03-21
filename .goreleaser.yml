@@ -35,9 +35,12 @@ archives:
     name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
   # archive releases containing: binary, readme, and license. tarballs (macos, linux), zip (windows)
   - id: archives
-    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
-    replacements:
-      386: i386
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}amd64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
     format_overrides:
       - goos: windows
         format: zip
@@ -122,14 +125,20 @@ nfpms:
       - rpm
     overrides:
       rpm:
-        file_name_template: "{{ .ProjectName }}-{{ .Version }}-{{ .Arch }}"
-        replacements:
-          amd64: x86_64
-          386: i686
-          arm: armhfp
-          arm64: aarch64
+        file_name_template: >-
+          {{ .ProjectName }}-
+          {{- .Version }}-
+          {{- if eq .Arch "amd64" }}x86_64
+          {{- else if eq .Arch "386" }}i386
+          {{- else if eq .Arch "arm" }}armhfp
+          {{- else if eq .Arch "arm64" }}aarch64
+          {{- else }}{{ .Arch }}{{ end }}
       deb:
-        file_name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
-        replacements:
-          386: i386
-          arm: armel
+        file_name_template: >-
+          {{ .ProjectName }}_
+          {{- .Version }}_
+          {{- .Os }}_
+          {{- if eq .Arch "386" }}i386
+          {{- else if eq .Arch "386" }}i386
+          {{- else if eq .Arch "arm" }}armel
+          {{- else }}{{ .Arch }}{{ end }}
