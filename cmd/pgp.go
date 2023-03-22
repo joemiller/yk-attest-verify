@@ -61,6 +61,12 @@ func init() {
 		"Comma-separated list of accepted card holder names. If not set all policies are accepted.",
 	)
 
+	pgpCmd.Flags().Bool(
+		"json",
+		false,
+		"Use JSON output format",
+	)
+
 	pgpCmd.Flags().String(
 		"ssh-pub-key",
 		"",
@@ -156,16 +162,23 @@ func pgpVerify(cmd *cobra.Command, args []string) error {
 		verifyReq.Policy.AllowedCardholders = append(verifyReq.Policy.AllowedCardholders, val...)
 	}
 
+	res := &result{Cmd: cmd}
+	res.Data.Error = &resultError{}
+
+	if val, err := cmd.Flags().GetBool("json"); err == nil {
+		res.JSON = val
+	}
+
 	errors := false
 
 	attestation, err := pgp.VerifyAttestation(verifyReq)
-	if attestation != nil {
+	if attestation != nil && !res.JSON {
 		printPGPAttestation(cmd.OutOrStdout(), attestation)
 	}
 
-	cmd.Println("\nAttestation Policy Checks:")
+	res.Printf("\nAttestation Policy Checks:\n")
 	if err == nil {
-		cmd.Println("✔ All policy checks OK")
+		res.Printf("✔ All policy checks OK\n")
 	} else {
 		errors = true
 		verifyErrs, ok := err.(pgp.VerificationErrors)
@@ -173,16 +186,16 @@ func pgpVerify(cmd *cobra.Command, args []string) error {
 			return err
 		}
 		for _, e := range verifyErrs {
-			cmd.Println("✖", e)
+			res.PrintE(e.Error())
 		}
 	}
 
 	// if --ssh-pub-key=file was specified, compare it to the public key in the attestation
 	if sshPubKey != nil {
-		cmd.Printf("\nSSH public key file '%s':\n", sshPubKeyFile)
+		res.Printf("\nSSH public key file '%s':\n", sshPubKeyFile)
 
 		if pubkeys.Compare(sshPubKey, attestCert.PublicKey) {
-			cmd.Println("✔ SSH public key file matches attestation public key")
+			res.Printf("✔ SSH public key file matches attestation public key\n")
 		} else {
 			errors = true
 			sshFP := ssh.FingerprintSHA256(sshPubKey)
@@ -190,10 +203,16 @@ func pgpVerify(cmd *cobra.Command, args []string) error {
 			certFP := ssh.FingerprintSHA256(certSSHpub)
 
 			if err != nil {
-				cmd.Printf("✖ Unable to parse attestation cert public key: %v\n", err)
+				res.PrintE(fmt.Sprintf("Unable to parse attestation cert public key: %v", err))
 			} else {
-				cmd.Printf("✖ SSH public key (%s) does not match attestation public key (%s)\n", sshFP, certFP)
+				res.PrintE(fmt.Sprintf("SSH public key (%s) does not match attestation public key (%s)", sshFP, certFP))
 			}
+		}
+	}
+
+	if res.JSON {
+		if err = res.PrintResultJSON(attestation); err != nil {
+			return err
 		}
 	}
 

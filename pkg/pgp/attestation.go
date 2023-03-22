@@ -6,6 +6,7 @@ import (
 	"encoding/asn1"
 	"encoding/binary"
 	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"time"
 )
@@ -45,6 +46,11 @@ var keysourceNames = []string{
 
 func (k Keysource) String() string {
 	return keysourceNames[k]
+}
+
+// MarshalJSON encodes value into String().
+func (k Keysource) MarshalJSON() ([]byte, error) {
+	return json.Marshal(k.String())
 }
 
 // Slot represents the YubiKey card slot that is covered by the attestation.
@@ -90,6 +96,11 @@ func (f Formfactor) String() string {
 	return formfactorNames[f]
 }
 
+// MarshalJSON encodes value into String().
+func (f Formfactor) MarshalJSON() ([]byte, error) {
+	return json.Marshal(f.String())
+}
+
 // TouchPolicy represents proof-of-presence requirements when signing or
 // decrypting with asymmetric key in a given slot.
 type TouchPolicy int
@@ -114,6 +125,11 @@ var touchPolicyNames = []string{
 
 func (t TouchPolicy) String() string {
 	return touchPolicyNames[t]
+}
+
+// MarshalJSON encodes value into String().
+func (t TouchPolicy) MarshalJSON() ([]byte, error) {
+	return json.Marshal(t.String())
 }
 
 // Attestation contains additional information about a key attested to be on a
