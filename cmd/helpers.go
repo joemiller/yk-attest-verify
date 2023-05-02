@@ -4,6 +4,7 @@ import (
 	"crypto/x509"
 	"encoding/json"
 	"encoding/pem"
+	"fmt"
 	"os"
 	"strings"
 
@@ -77,6 +78,6 @@ func (o *result) PrintResultJSON(attestation interface{}) error {
 	if err != nil {
 		return err
 	}
-	o.Cmd.Printf("%s\n", data)
+	fmt.Fprintf(o.Cmd.OutOrStdout(), "%s\n", data)
 	return nil
 }
