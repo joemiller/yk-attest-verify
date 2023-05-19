@@ -5,7 +5,7 @@ go 1.20
 require (
 	github.com/joemiller/certin v0.3.4
 	github.com/spf13/cobra v1.6.1
-	github.com/stretchr/testify v1.8.2
+	github.com/stretchr/testify v1.8.3
 	golang.org/x/crypto v0.9.0
 )
 
