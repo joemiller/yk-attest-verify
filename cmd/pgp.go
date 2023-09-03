@@ -118,6 +118,8 @@ func pgpVerify(cmd *cobra.Command, args []string) error {
 			switch i {
 			case "AUT", "SIG", "ENC":
 				verifyReq.Policy.AllowedSlots = append(verifyReq.Policy.AllowedSlots, pgp.Slot(i))
+			case "DEC":
+				verifyReq.Policy.AllowedSlots = append(verifyReq.Policy.AllowedSlots, pgp.Slot("ENC"))
 			default:
 				return fmt.Errorf("--allowed-slots unknown slot name '%v'", i)
 			}

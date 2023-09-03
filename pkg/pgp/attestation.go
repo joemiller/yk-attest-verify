@@ -313,7 +313,7 @@ func parseSlot(subject string) (Slot, error) {
 	switch slot {
 	case "SIG":
 		return SlotSignature, nil
-	case "ENC":
+	case "ENC", "DEC":
 		return SlotEncrypt, nil
 	case "AUT":
 		return SlotAuthenticate, nil
