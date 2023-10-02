@@ -64,7 +64,7 @@ changelog:
 brews:
   - ids:
       - archives
-    tap:
+    repository:
       owner: joemiller
       name: homebrew-taps
     commit_author:
