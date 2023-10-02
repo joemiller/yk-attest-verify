@@ -24,7 +24,7 @@ build:
 release:
 	@goreleaser $(GORELEASER_ARGS)
 
-snapshot: GORELEASER_ARGS= --rm-dist --snapshot
+snapshot: GORELEASER_ARGS= --clean --snapshot
 snapshot: release
 
 todo:
