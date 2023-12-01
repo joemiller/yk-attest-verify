@@ -3,9 +3,9 @@ module github.com/joemiller/yk-attest-verify
 go 1.21.1
 
 require (
-	github.com/joemiller/certin v0.3.4
-	github.com/spf13/cobra v1.7.0
-	github.com/stretchr/testify v1.8.2
+	github.com/joemiller/certin v0.3.5
+	github.com/spf13/cobra v1.8.0
+	github.com/stretchr/testify v1.8.4
 	golang.org/x/crypto v0.16.0
 )
 
