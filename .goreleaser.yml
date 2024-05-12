@@ -70,7 +70,7 @@ brews:
     commit_author:
       name: joe miller
       email: yk-attest-verify@joemiller.me
-    folder: Formula
+    directory: Formula
     homepage: "https://github.com/joemiller/yk-attest-verify"
     description: "Validate and enforce policy on YubiKey PIV and OpenPGP attestation certificates"
 
