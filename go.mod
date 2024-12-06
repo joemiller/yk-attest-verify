@@ -5,7 +5,7 @@ go 1.21.1
 require (
 	github.com/joemiller/certin v0.3.5
 	github.com/spf13/cobra v1.8.1
-	github.com/stretchr/testify v1.9.0
+	github.com/stretchr/testify v1.10.0
 	golang.org/x/crypto v0.30.0
 )
 
