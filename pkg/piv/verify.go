@@ -41,12 +41,11 @@ type Policy struct {
 //
 // Attestation (AttestCert) certs can be generated with the `yubico-piv-tool` utility
 //
-//    # generate an attestation cert against the 9a slot:
-//     yubico-piv-tool --action=attest --slot=9a >piv-attest.pem
+//	# generate an attestation cert against the 9a slot:
+//	 yubico-piv-tool --action=attest --slot=9a >piv-attest.pem
 //
-//    # export the signer cert:
-//     yubico-piv-tool --action=read-certificate --slot=f9 >piv-attestation-signer.pem
-//
+//	# export the signer cert:
+//	 yubico-piv-tool --action=read-certificate --slot=f9 >piv-attestation-signer.pem
 type VerificationRequest struct {
 	AttestCert       *x509.Certificate
 	AttestSignerCert *x509.Certificate
@@ -59,7 +58,8 @@ type VerificationErrors []error
 // Error implements the error interface for VerificationErrors and returns a
 // summary of the error messages. To inspect the list of errors individually you
 // would cast the err to VerificationError and inspect the list.
-//    errs := err.(VerificationErrors)
+//
+//	errs := err.(VerificationErrors)
 func (ve VerificationErrors) Error() string {
 	if len(ve) == 0 {
 		return ""
@@ -126,7 +126,7 @@ verifyCert:
 
 	attestation, err := ParseAttestation(req.AttestCert)
 	if err != nil {
-		errs = append(errs, fmt.Errorf("Unable to parse attestation cert: %v", err))
+		errs = append(errs, fmt.Errorf("unable to parse attestation cert: %v", err))
 		return nil, errs
 	}
 

@@ -100,11 +100,11 @@ func pgpVerify(cmd *cobra.Command, args []string) error {
 	if sshPubKeyFile != "" {
 		pubkeyraw, err := os.ReadFile(sshPubKeyFile)
 		if err != nil {
-			return fmt.Errorf("Error reading SSH pub key %s: %w", sshPubKeyFile, err)
+			return fmt.Errorf("error reading SSH pub key %s: %w", sshPubKeyFile, err)
 		}
 		sshPubKey, _, _, _, err = ssh.ParseAuthorizedKey(pubkeyraw)
 		if err != nil {
-			return fmt.Errorf("Error parsing SSH pub key %s: %w", sshPubKeyFile, err)
+			return fmt.Errorf("error parsing SSH pub key %s: %w", sshPubKeyFile, err)
 		}
 	}
 
@@ -226,14 +226,14 @@ func pgpVerify(cmd *cobra.Command, args []string) error {
 }
 
 func printPGPAttestation(w io.Writer, attestation *pgp.Attestation) {
-	fmt.Fprintln(w, "YubiKey OPGP Attestation:")
-	fmt.Fprintf(w, " - Generation Date: %s\n", attestation.GenerationDate)
-	fmt.Fprintf(w, " - Cardholder     : %s\n", attestation.Cardholder)
-	fmt.Fprintf(w, " - Key slot       : %s\n", attestation.Slot)
-	fmt.Fprintf(w, " - Key source     : %s\n", attestation.Keysource)
-	fmt.Fprintf(w, " - Key fingerprint: %s\n", attestation.Fingerprint)
-	fmt.Fprintf(w, " - YubiKey Version: v%d.%d.%d\n", attestation.Version.Major, attestation.Version.Minor, attestation.Version.Patch)
-	fmt.Fprintf(w, " - Serial #       : %d\n", attestation.Serial)
-	fmt.Fprintf(w, " - Formfactor     : %s\n", attestation.Formfactor)
-	fmt.Fprintf(w, " - Touch Policy   : %s\n", attestation.TouchPolicy)
+	fmt.Fprintln(w, "YubiKey OPGP Attestation:")                                                                                       //nolint:errcheck
+	fmt.Fprintf(w, " - Generation Date: %s\n", attestation.GenerationDate)                                                             //nolint:errcheck
+	fmt.Fprintf(w, " - Cardholder     : %s\n", attestation.Cardholder)                                                                 //nolint:errcheck
+	fmt.Fprintf(w, " - Key slot       : %s\n", attestation.Slot)                                                                       //nolint:errcheck
+	fmt.Fprintf(w, " - Key source     : %s\n", attestation.Keysource)                                                                  //nolint:errcheck
+	fmt.Fprintf(w, " - Key fingerprint: %s\n", attestation.Fingerprint)                                                                //nolint:errcheck
+	fmt.Fprintf(w, " - YubiKey Version: v%d.%d.%d\n", attestation.Version.Major, attestation.Version.Minor, attestation.Version.Patch) //nolint:errcheck
+	fmt.Fprintf(w, " - Serial #       : %d\n", attestation.Serial)                                                                     //nolint:errcheck
+	fmt.Fprintf(w, " - Formfactor     : %s\n", attestation.Formfactor)                                                                 //nolint:errcheck
+	fmt.Fprintf(w, " - Touch Policy   : %s\n", attestation.TouchPolicy)                                                                //nolint:errcheck
 }

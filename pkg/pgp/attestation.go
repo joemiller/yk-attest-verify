@@ -106,7 +106,8 @@ func (f Formfactor) MarshalJSON() ([]byte, error) {
 type TouchPolicy int
 
 // Touch policies supported by this package.
-//     $ ykman openpgp set-touch
+//
+//	$ ykman openpgp set-touch
 const (
 	TouchPolicyDisabled        TouchPolicy = iota // No touch required
 	TouchPolicyEnabled                            // Touch required
@@ -302,8 +303,9 @@ func (a *Attestation) addExt(e pkix.Extension) error {
 
 // parseSlot parses the common-name from the attestation cert's subject. The format
 // is described in: https://developers.yubico.com/PGP/Attestation.html -
-//     Subject will be the string "YubiKey OPGP Attestation " with the
-//     attested slot appended ("SIG", "DEC", or "AUT")
+//
+//	Subject will be the string "YubiKey OPGP Attestation " with the
+//	attested slot appended ("SIG", "DEC", or "AUT")
 func parseSlot(subject string) (Slot, error) {
 	if len(subject) < 3 {
 		return Slot(""), fmt.Errorf("subject less than 3 chars, unable to determine slot")
@@ -318,5 +320,5 @@ func parseSlot(subject string) (Slot, error) {
 	case "AUT":
 		return SlotAuthenticate, nil
 	}
-	return Slot(""), fmt.Errorf("Unknown slot '%v'", slot)
+	return Slot(""), fmt.Errorf("unknown slot '%v'", slot)
 }
