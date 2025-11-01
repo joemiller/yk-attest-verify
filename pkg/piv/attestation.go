@@ -40,13 +40,14 @@ var (
 type Slot string
 
 // Slot represents the YubiKey card slot that is covered by the attestation.
-//     $ yubico-piv-tool -h
-//       9a is for PIV Authentication
-//       9c is for Digital Signature (PIN always checked)
-//       9d is for Key Management
-//       9e is for Card Authentication (PIN never checked)
-//       82-95 is for Retired Key Management
-//       f9 is for Attestation
+//
+//	$ yubico-piv-tool -h
+//	  9a is for PIV Authentication
+//	  9c is for Digital Signature (PIN always checked)
+//	  9d is for Key Management
+//	  9e is for Card Authentication (PIN never checked)
+//	  82-95 is for Retired Key Management
+//	  f9 is for Attestation
 const (
 	SlotAuthenticate  = Slot("9a")
 	SlotSignature     = Slot("9c")
@@ -282,8 +283,9 @@ func (a *Attestation) addExt(e pkix.Extension) error {
 
 // parseSlot parses the common-name from the attestation cert's subject. The format
 // is described in: https://developers.yubico.com/PIV/Introduction/PIV_attestation.html
-//     Subject will be the string "YubiKey PIV Attestation " with the
-//     attested slot appended.
+//
+//	Subject will be the string "YubiKey PIV Attestation " with the
+//	attested slot appended.
 func parseSlot(subject string) (Slot, error) {
 	if len(subject) < 2 {
 		return Slot(""), fmt.Errorf("subject less than 2 chars, unable to determine slot")
@@ -300,5 +302,5 @@ func parseSlot(subject string) (Slot, error) {
 	case "9e":
 		return SlotKeyCardAuth, nil
 	}
-	return Slot(""), fmt.Errorf("Unknown slot '%v'", slot)
+	return Slot(""), fmt.Errorf("unknown slot '%v'", slot)
 }

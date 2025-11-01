@@ -78,6 +78,6 @@ func (o *result) PrintResultJSON(attestation interface{}) error {
 	if err != nil {
 		return err
 	}
-	fmt.Fprintf(o.Cmd.OutOrStdout(), "%s\n", data)
+	fmt.Fprintf(o.Cmd.OutOrStdout(), "%s\n", data) //nolint:errcheck
 	return nil
 }

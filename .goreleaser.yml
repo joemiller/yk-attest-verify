@@ -1,3 +1,5 @@
+version: 2
+
 project_name: yk-attest-verify
 
 builds:
@@ -30,7 +32,7 @@ builds:
 archives:
   # binary-only releases - all platforms
   - id: binaries
-    format: binary
+    formats: [binary]
     name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
   # archive releases containing: binary, readme, and license. tarballs (macos, linux), zip (windows)
   - id: archives
@@ -42,7 +44,7 @@ archives:
       {{- else }}{{ .Arch }}{{ end }}
     format_overrides:
       - goos: windows
-        format: zip
+        formats: [zip]
 
 checksum:
   name_template: "checksums.txt"
@@ -74,6 +76,8 @@ brews:
     homepage: "https://github.com/joemiller/yk-attest-verify"
     description: "Validate and enforce policy on YubiKey PIV and OpenPGP attestation certificates"
 
+# dockers section temporarily kept - dockers_v2 migration pending
+# TODO: migrate to dockers_v2 once structure is confirmed
 dockers:
   # primary docker image for amd64 arch
   - dockerfile: Dockerfile

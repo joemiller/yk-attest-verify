@@ -94,11 +94,11 @@ func pivVerify(cmd *cobra.Command, args []string) error {
 	if sshPubKeyFile != "" {
 		pubkeyraw, err := os.ReadFile(sshPubKeyFile)
 		if err != nil {
-			return fmt.Errorf("Error reading SSH pub key %s: %w", sshPubKeyFile, err)
+			return fmt.Errorf("error reading SSH pub key %s: %w", sshPubKeyFile, err)
 		}
 		sshPubKey, _, _, _, err = ssh.ParseAuthorizedKey(pubkeyraw)
 		if err != nil {
-			return fmt.Errorf("Error parsing SSH pub key %s: %w", sshPubKeyFile, err)
+			return fmt.Errorf("error parsing SSH pub key %s: %w", sshPubKeyFile, err)
 		}
 	}
 
@@ -212,11 +212,11 @@ func pivVerify(cmd *cobra.Command, args []string) error {
 }
 
 func printPIVAttestation(w io.Writer, attestation *piv.Attestation) {
-	fmt.Fprintln(w, "YubiKey PIV Attestation:")
-	fmt.Fprintf(w, " - Key slot       : %s\n", attestation.Slot)
-	fmt.Fprintf(w, " - YubiKey Version: v%d.%d.%d\n", attestation.Version.Major, attestation.Version.Minor, attestation.Version.Patch)
-	fmt.Fprintf(w, " - Serial #       : %d\n", attestation.Serial)
-	fmt.Fprintf(w, " - Formfactor     : %s\n", attestation.Formfactor)
-	fmt.Fprintf(w, " - PIN Policy     : %s\n", attestation.PINPolicy)
-	fmt.Fprintf(w, " - Touch Policy   : %s\n", attestation.TouchPolicy)
+	fmt.Fprintln(w, "YubiKey PIV Attestation:")                                                                                        //nolint:errcheck
+	fmt.Fprintf(w, " - Key slot       : %s\n", attestation.Slot)                                                                       //nolint:errcheck
+	fmt.Fprintf(w, " - YubiKey Version: v%d.%d.%d\n", attestation.Version.Major, attestation.Version.Minor, attestation.Version.Patch) //nolint:errcheck
+	fmt.Fprintf(w, " - Serial #       : %d\n", attestation.Serial)                                                                     //nolint:errcheck
+	fmt.Fprintf(w, " - Formfactor     : %s\n", attestation.Formfactor)                                                                 //nolint:errcheck
+	fmt.Fprintf(w, " - PIN Policy     : %s\n", attestation.PINPolicy)                                                                  //nolint:errcheck
+	fmt.Fprintf(w, " - Touch Policy   : %s\n", attestation.TouchPolicy)                                                                //nolint:errcheck
 }

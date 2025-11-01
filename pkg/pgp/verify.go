@@ -22,12 +22,11 @@ type Policy struct {
 // `ykman openpgp attest` command. The AttestSignerCert used to sign the attestation cert (signer)
 // can be exported from the Yubikey using the `ykman openpgp export-certificate ATT`:
 //
-//    # create an attestation cert covering the key in the authentication (AUT) key slot
-//     ykman openpgp attest AUT attest.pem
+//	# create an attestation cert covering the key in the authentication (AUT) key slot
+//	 ykman openpgp attest AUT attest.pem
 //
-//    # export the attestation (ATT) singer cert used to sign the cert above.
-//    ykman openpgp attest AUT signer.pem
-//
+//	# export the attestation (ATT) singer cert used to sign the cert above.
+//	ykman openpgp attest AUT signer.pem
 type VerificationRequest struct {
 	AttestCert       *x509.Certificate
 	AttestSignerCert *x509.Certificate
@@ -40,7 +39,8 @@ type VerificationErrors []error
 // Error implements the error interface for VerificationErrors and returns a
 // summary of the error messages. To inspect the list of errors individually you
 // would cast the err to VerificationError and inspect the list.
-//    errs := err.(VerificationErrors)
+//
+//	errs := err.(VerificationErrors)
 func (ve VerificationErrors) Error() string {
 	if len(ve) == 0 {
 		return ""
@@ -108,7 +108,7 @@ verifyCert:
 
 	attestation, err := ParseAttestation(req.AttestCert)
 	if err != nil {
-		errs = append(errs, fmt.Errorf("Unable to parse attestation cert: %v", err))
+		errs = append(errs, fmt.Errorf("unable to parse attestation cert: %v", err))
 		return nil, errs
 	}
 
