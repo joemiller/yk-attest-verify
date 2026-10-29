@@ -3,6 +3,7 @@ package pgp
 import (
 	"crypto/x509"
 	"encoding/pem"
+	"errors"
 	"fmt"
 	"strings"
 )
@@ -90,8 +91,9 @@ func (v *verifier) verify(req VerificationRequest) (*Attestation, error) {
 		goto verifyCert
 	}
 
-	// If old root fails, try the new certificate chain:
+	// If old root fails, try one of the newer certificate chains:
 	// Root -> Attestation Intermediate B 1 -> OPGP Attestation B 1 -> Device Signer
+	// Root -> Attestation Intermediate B 1 -> OPGP Attestation B2 1 -> Device Signer
 	if err := v.tryNewCertChain(req.AttestSignerCert); err == nil {
 		// New chain verification succeeded
 		goto verifyCert
@@ -191,7 +193,7 @@ func (v *verifier) tryNewCertChain(signerCert *x509.Certificate) error {
 		return err
 	}
 
-	opgpInt, err := yubicoOPGPIntermediate()
+	opgpInts, err := yubicoOPGPIntermediates()
 	if err != nil {
 		return err
 	}
@@ -201,13 +203,23 @@ func (v *verifier) tryNewCertChain(signerCert *x509.Certificate) error {
 		return err
 	}
 
-	// Verify: attestation intermediate B -> OPGP intermediate
-	if err := verifySignature(attestInt, opgpInt); err != nil {
-		return err
+	// Verify: attestation intermediate B -> any OPGP intermediate -> attestation signer cert
+	var errs []error
+	for _, opgpInt := range opgpInts {
+		if err := verifySignature(attestInt, opgpInt); err != nil {
+			errs = append(errs, err)
+			continue
+		}
+		if err := verifySignature(opgpInt, signerCert); err != nil {
+			errs = append(errs, err)
+			continue
+		}
+		return nil
 	}
-
-	// Verify: OPGP intermediate -> attestation signer cert
-	return verifySignature(opgpInt, signerCert)
+	if len(errs) == 0 {
+		return errors.New("no OPGP intermediate matches the attestation signer certificate")
+	}
+	return errors.Join(errs...)
 }
 
 // yubicoPGPCAPEM is the legacy PEM encoded attestation certificate used by Yubico for OpenPGP keys.
@@ -264,6 +276,7 @@ Vpmq2Sh/xT5HiFuhf4wJb0bK
 
 // yubicoAttestationIntermediateBPEM is the middle intermediate in the new cert chain.
 // Chain: Root -> Attestation Intermediate B 1 -> OPGP Attestation B 1 -> Device Signer
+//    or  Root -> Attestation Intermediate B 1 -> OPGP Attestation B2 n -> Device Signer
 //
 // https://developers.yubico.com/PKI/yubico-intermediate.pem
 const yubicoAttestationIntermediateBPEM = `-----BEGIN CERTIFICATE-----
@@ -287,12 +300,13 @@ b7KAHAw8PmrWaNPG2kjKerxPEfecivlFawp2RWZvxrVtn3TV2SBxyCJCkXsND05d
 CErVHSJIs+BdtTVNY9AwtyPmnyb0v4mSTzvWdw==
 -----END CERTIFICATE-----`
 
-// yubicoOPGPIntermediatePEM contains the intermediate certificate used in the new cert chain.
+// yubicoOPGPIntermediateB1PEM is the "Yubico OPGP Attestation B 1" intermediate of the new
+// cert chain.
 // This intermediate is signed by Yubico Attestation Intermediate B 1 which is signed by
 // Yubico Attestation Root 1, and signs the device attestation signers.
 //
 // https://developers.yubico.com/PKI/yubico-intermediate.pem
-const yubicoOPGPIntermediatePEM = `-----BEGIN CERTIFICATE-----
+const yubicoOPGPIntermediateB1PEM = `-----BEGIN CERTIFICATE-----
 MIIDSjCCAjKgAwIBAgIUbeEhxjsv7XjQwdAQIi5G5i+4qhIwDQYJKoZIhvcNAQEL
 BQAwLjEsMCoGA1UEAwwjWXViaWNvIEF0dGVzdGF0aW9uIEludGVybWVkaWF0ZSBC
 IDEwIBcNMjQxMjAxMDAwMDAwWhgPOTk5OTEyMzEyMzU5NTlaMCYxJDAiBgNVBAMM
@@ -312,6 +326,36 @@ REzHU6SVvuJo11jfHpJTfpbpCqvcVl8bMPUbdtOvqc1ibkj7O7OmTDACqTT1f3yQ
 Zj0PbreP1qN9jv7kDAxT9O2yVSgXNXbz/Ygl121TkGWjXRQ8B3PW2Z3+n7B8ETAd
 8fJ0/5guPgvO2VQHQv8H9U3tsqSq/siosMJ8KtS5
 -----END CERTIFICATE-----`
+
+// yubicoOPGPIntermediateB2PEM is the "Yubico OPGP Attestation B2 1" intermediate of the new
+// cert chain, added on 2026-05-11. Same position in the chain as B 1.
+//
+// https://github.com/Yubico/developers.yubico.com/commit/dd8f4b5cd6d6a0aad5510e8ca76c6bb5ecf71ad9
+const yubicoOPGPIntermediateB2PEM = `-----BEGIN CERTIFICATE-----
+MIIDRzCCAjGgAwIBAgIUPfyC/5NND4E2jJ6oT123al0I5oowCwYJKoZIhvcNAQEL
+MC4xLDAqBgNVBAMMI1l1YmljbyBBdHRlc3RhdGlvbiBJbnRlcm1lZGlhdGUgQiAx
+MCAXDTI1MDgwMTAwMDAwMFoYDzk5OTkxMjMxMjM1OTU5WjAnMSUwIwYDVQQDDBxZ
+dWJpY28gT1BHUCBBdHRlc3RhdGlvbiBCMiAxMIIBIjANBgkqhkiG9w0BAQEFAAOC
+AQ8AMIIBCgKCAQEA3Z4WSzUX7zgwsgHzawiBlX9GC1fgSfuiDLlSSJo/+H/flHFk
+qrukngvQ17ZA0/xSr4xNB8I4WzEOv0lH/iN+BgCRbSAoLtTfmczIzVKsU4mVZtKD
+a9nrB1UL9n0uKjJycn2O4xzG7L4MsNvkjbrbTXE7GHDw9nFQcIHa0DpKad+JWs+h
+RP50VbCwo1G2vBWN2orDsogNnsZOI/pbZw9wOlu75q59+0f427CR9xAX3vUBpqfS
+0eurrgA5O8IfbdHjTl1EfVJlJ92xlVyI0u8yL94Dsp1ceqBi3QfK+Y7sscTqWpFQ
+iVWcdFFeIirTt3zXLKebLkkFEmKEMKCOFJ4GVQIDAQABo2YwZDAdBgNVHQ4EFgQU
+03M46+YrjQidQh9r8s5MuSTSLFgwHwYDVR0jBBgwFoAU6rdCkJ4Me2R621R8A7p8
+Tp/YoWEwEgYDVR0TAQH/BAgwBgEB/wIBATAOBgNVHQ8BAf8EBAMCAYYwCwYJKoZI
+hvcNAQELA4IBAQAVMgq4ECpXczxSyyJAYC96JleZHqSzf/N0t6RR/WfqpN+BIQaH
+sUyWDFKSvLFcKNF2f1QByYWT+/3ikBDkydyVp4VhMeOSJLLHPGOYrlEFbn/bSB6r
+L+CeT4sUQdJdtnGiwepRXHILRGNKMKP1qd8qcnmIZgkSPqJCK8oYRxSZYqIO4RgP
+xxTy6rEBf4kBLx/zdYmbiDsLXkxMuzELWtdcSRtrp864sF4E8c7IKlhOgXZk8oiv
+AnGhfApF3sCEGqqrh4rrf9OSvHQI+YHOLBMGJP6gAexOr5+mi90cNoSVQT+xowYL
+YTb/RyHkfURbOWBl5jf+sWIBgxJ7eotOhzZ7
+-----END CERTIFICATE-----`
+
+var yubicoOPGPIntermediatePEMs = []string{
+	yubicoOPGPIntermediateB1PEM,
+	yubicoOPGPIntermediateB2PEM,
+}
 
 func yubicoCA() (*x509.Certificate, error) {
 	b, _ := pem.Decode([]byte(yubicoPGPCAPEM))
@@ -337,10 +381,18 @@ func yubicoAttestationIntermediateB() (*x509.Certificate, error) {
 	return x509.ParseCertificate(b.Bytes)
 }
 
-func yubicoOPGPIntermediate() (*x509.Certificate, error) {
-	b, _ := pem.Decode([]byte(yubicoOPGPIntermediatePEM))
-	if b == nil {
-		return nil, fmt.Errorf("failed to decode yubico OPGP intermediate pem data")
+func yubicoOPGPIntermediates() ([]*x509.Certificate, error) {
+	certs := make([]*x509.Certificate, 0, len(yubicoOPGPIntermediatePEMs))
+	for i, p := range yubicoOPGPIntermediatePEMs {
+		b, _ := pem.Decode([]byte(p))
+		if b == nil {
+			return nil, fmt.Errorf("failed to decode yubico OPGP intermediate #%d pem data", i)
+		}
+		c, err := x509.ParseCertificate(b.Bytes)
+		if err != nil {
+			return nil, fmt.Errorf("parsing yubico OPGP intermediate #%d: %w", i, err)
+		}
+		certs = append(certs, c)
 	}
-	return x509.ParseCertificate(b.Bytes)
+	return certs, nil
 }

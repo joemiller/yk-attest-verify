@@ -189,3 +189,19 @@ func TestVerify_Policies(t *testing.T) {
 		})
 	}
 }
+
+func TestOPGPIntermediates(t *testing.T) {
+	attestInt, err := yubicoAttestationIntermediateB()
+	assert.NoError(t, err)
+
+	ints, err := yubicoOPGPIntermediates()
+	assert.NoError(t, err)
+
+	var names []string
+	for _, c := range ints {
+		names = append(names, c.Subject.CommonName)
+		assert.NoError(t, verifySignature(attestInt, c), c.Subject.CommonName)
+	}
+	assert.Contains(t, names, "Yubico OPGP Attestation B 1")
+	assert.Contains(t, names, "Yubico OPGP Attestation B2 1")
+}
